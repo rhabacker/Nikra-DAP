@@ -32,7 +32,6 @@
 # ************************************************************************************
 
 
-from importlib.resources import path
 import FreeCAD
 from FreeCAD import Units
 import os
