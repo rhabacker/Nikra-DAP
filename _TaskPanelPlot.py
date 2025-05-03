@@ -42,7 +42,10 @@ import math
 from PySide import QtCore
 import DapPlot
 
-from freecad.plot import Plot
+try:
+    from FreeCAD.Plot import Plot
+except ImportError:
+    from freecad.plot import Plot
 
 if FreeCAD.GuiUp:
     import FreeCADGui
