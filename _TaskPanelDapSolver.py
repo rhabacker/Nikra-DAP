@@ -314,8 +314,12 @@ class TaskPanelDapSolver:
                         changed = True
                         
                 elif sel[0].Object.TypeId == 'Sketcher::SketchObject':
-                    support_name = sel[0].Object.Support[0][0].Name
-                    sub_shape = sel[0].Object.Support[0][1]
+                    if hasattr(sel[0].Object, "Support"):
+                        supp = sel[0].Object.Support
+                    elif hasattr(sel[0].Object, "AttachmentSupport"):
+                        supp = sel[0].Object.AttachmentSupport
+                    support_name = supp[0][0].Name
+                    sub_shape = supp[0][1]
                     if "XY_Plane" in support_name:
                         #FreeCAD.Console.PrintMessage("YES XY PLANE \n")
                         normal = FreeCAD.Vector(0,0,1)
@@ -327,7 +331,7 @@ class TaskPanelDapSolver:
                         normal = FreeCAD.Vector(1,0,0)
                         changed = True
                     if "Face" in sub_shape[0]:
-                        face = sel[0].Object.Support[0][0].getSubObject(sub_shape[0])
+                        face = supp[0][0].getSubObject(sub_shape[0])
                         normal = face.normalAt(0,0)
                         changed = True
                 elif sel[0].Object.TypeId == 'Part::Plane':
@@ -345,7 +349,7 @@ class TaskPanelDapSolver:
                         normal = FreeCAD.Vector(1,0,0)
                         changed = True
                 else:
-                    FreeCAD.Console.PrintError("Can not identify normal from " + str(sel[0].Object.Label) + "object \n")
+                    FreeCAD.Console.PrintError("Can not identify normal from " + str(sel[0].Object.Label) + "object with typeid " + str(sel[0].Object.TypeId) + "\n")
                     
                 if changed:
                     self.XVector = normal.x
